@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
               if (value == null || value.isEmpty) {
                 return 'Usuario requerido';
               }
-              if (value != 'a') {
+              if (value != 'admin') {
                 return 'Usuario incorrecto';
               }
               return null;
@@ -171,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
               if (value == null || value.isEmpty) {
                 return 'Contraseña requerida';
               }
-              if (value != 'a') {
+              if (value != 'admin') {
                 return 'Contraseña incorrecta';
               }
               return null;
