@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../models/asistencia.dart';
-import '../controllers/asistenciaDB.dart';
-import '../controllers/horarioDB.dart';
-import '../controllers/profesorDB.dart';
-import 'package:dam_u3_practica1_asistenciaprofesores/widgets/drawer.dart';
+import '../models/tarea.dart';
+import '../controllers/tareaDB.dart';
+import 'package:dam_u3_practica2/widgets/drawer.dart';
 
 class ConsultasPage extends StatefulWidget {
-  const ConsultasPage({super.key});
+  const ConsultasPage({Key? key});
 
   @override
   createState() => _ConsultasPageState();
 }
 
 class _ConsultasPageState extends State<ConsultasPage> {
-  List<Asistencia> asistencias = [];
-  Map<DateTime, List<Asistencia>> _asistenciasPorDia = {};
+  List<Tarea> tareas = [];
   DateTime _selectedDay = DateTime.now();
 
   Future<void> loadData() async {
-    List<Asistencia> resultAsistencia = await AsistenciaDB.getAsistencias();
+    List<Tarea> resultTareas = await TareaDB.getTareas();
     setState(() {
-      asistencias = resultAsistencia;
-      _asistenciasPorDia = _mapAsistenciasPorDia(asistencias);
+      tareas = resultTareas;
     });
   }
 
@@ -33,43 +28,19 @@ class _ConsultasPageState extends State<ConsultasPage> {
     loadData();
   }
 
-  Map<DateTime, List<Asistencia>> _mapAsistenciasPorDia(
-      List<Asistencia> asistencias) {
-    final Map<DateTime, List<Asistencia>> map = {};
-    for (final asistencia in asistencias) {
-      final date = DateTime.parse(asistencia.fecha).toLocal();
-      final normalizedDate = DateTime(date.year, date.month, date.day);
-
-      if (map.containsKey(normalizedDate)) {
-        map[normalizedDate]!.add(asistencia);
-      } else {
-        map[normalizedDate] = [asistencia];
-      }
-    }
-    return map;
-  }
-
-  Future<List<String>> _getProfesoresPorDia(DateTime day) async {
-    final normalizedDay = DateTime(day.year, day.month, day.day);
-    final asistenciasDelDia = _asistenciasPorDia[normalizedDay] ?? [];
-
-    final nombres = await Future.wait(
-      asistenciasDelDia.map((asistencia) async {
-        final horario = await HorarioDB.getHorarioById(asistencia.nHorario);
-        final profesor =
-            await ProfesorDB.getProfesorPorNumero(horario.nProfesor);
-        return profesor.nombre;
-      }),
-    );
-
-    return nombres;
+  List<Tarea> _getTareasPorDia(DateTime day) {
+    return tareas
+        .where((tarea) =>
+    DateTime.parse(tarea.fechaEntrega).toLocal().isAtSameMomentAs(day) ||
+        DateTime.parse(tarea.fechaEntrega).toLocal().isAfter(day))
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profesores por Día'),
+        title: const Text('Tareas por Día'),
         centerTitle: true,
       ),
       drawer: const AppDrawer(),
@@ -81,7 +52,7 @@ class _ConsultasPageState extends State<ConsultasPage> {
               child: Column(
                 children: [
                   const Text(
-                    'Asistencias',
+                    'Tareas',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   Expanded(
@@ -90,7 +61,7 @@ class _ConsultasPageState extends State<ConsultasPage> {
                       child: Column(
                         children: [
                           const Text(
-                            'Selecciona un día para ver los profesores que asistieron',
+                            'Selecciona un día para ver las tareas que vencen',
                             style: TextStyle(fontSize: 18),
                           ),
                           Expanded(
@@ -100,44 +71,17 @@ class _ConsultasPageState extends State<ConsultasPage> {
                               lastDay: DateTime(2100),
                               eventLoader: (day) {
                                 final normalizedDay =
-                                    DateTime(day.year, day.month, day.day);
-                                return _asistenciasPorDia[normalizedDay] ?? [];
+                                DateTime(day.year, day.month, day.day);
+                                return _getTareasPorDia(normalizedDay);
                               },
                               headerStyle: const HeaderStyle(
                                 formatButtonVisible: false,
                                 titleCentered: true,
                               ),
-                              onDaySelected: (selectedDay, focusedDay) async {
-                                _selectedDay = selectedDay;
-
-                                final nombresProfesores =
-                                    await _getProfesoresPorDia(selectedDay);
-
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        "Profesores que asistieron el ${DateFormat('yyyy-MM-dd').format(selectedDay)}",
-                                      ),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: nombresProfesores
-                                            .map((nombre) =>
-                                                ListTile(title: Text(nombre)))
-                                            .toList(),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text("Cerrar"),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
+                              onDaySelected: (selectedDay, focusedDay) {
+                                setState(() {
+                                  _selectedDay = selectedDay;
+                                });
                               },
                             ),
                           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/materia.dart';
 import '../controllers/materiaDB.dart';
-import 'package:dam_u3_practica1_asistenciaprofesores/widgets/drawer.dart';
+import 'package:dam_u3_practica2/widgets/drawer.dart';
 
 class MateriasPage extends StatefulWidget {
   const MateriasPage({Key? key});
@@ -169,6 +169,7 @@ class _MateriasPageState extends State<MateriasPage> {
     if (result == true) {
       try {
         Materia newMateria = Materia(
+          idMateria: '', // Corregido: Este campo debe ser vacío para agregar un nuevo registro, ya que se supone que se generará automáticamente en la base de datos.
           nombre: _nombreController.text,
           semestre: _semestreController.text,
           docente: _docenteController.text,

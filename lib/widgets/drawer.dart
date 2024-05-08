@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:dam_u3_practica1_asistenciaprofesores/main.dart';
-import 'package:dam_u3_practica1_asistenciaprofesores/pages/profesor_page.dart';
-import 'package:dam_u3_practica1_asistenciaprofesores/pages/materias_page.dart';
-import 'package:dam_u3_practica1_asistenciaprofesores/pages/horarios_page.dart';
-import 'package:dam_u3_practica1_asistenciaprofesores/pages/asistencias_page.dart';
-import 'package:dam_u3_practica1_asistenciaprofesores/pages/consultas_page.dart';
+import 'package:dam_u3_practica2/main.dart';
+import 'package:dam_u3_practica2/pages/materias_page.dart';
+import 'package:dam_u3_practica2/pages/tareas_page.dart';
+import 'package:dam_u3_practica2/pages/consultas_page.dart';
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key});
+  const AppDrawer({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +27,6 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.school),
-            title: const Text('Profesores'),
-            onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ProfesorPage()));
-            },
-          ),
-          ListTile(
             leading: const Icon(Icons.book),
             title: const Text('Materias'),
             onTap: () {
@@ -49,23 +37,13 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.access_time),
-            title: const Text('Horarios'),
+            leading: const Icon(Icons.assignment),
+            title: const Text('Tareas'), // Cambia el texto a 'Tareas'
             onTap: () {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const HorariosPage()));
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.check_circle),
-            title: const Text('Asistencias'),
-            onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const AsistenciasPage()));
+                      builder: (context) => const TareaPage())); // Cambia la página a la página de tareas
             },
           ),
           const Divider(),
