@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: AlignmentGeometry.lerp(
                     Alignment.centerLeft, Alignment.centerRight, 0.5),
                 child: const AutoSizeText(
-                  "REGISTRO DE ASISTENCIA DE DOCENCIA",
+                  "REGISTRO DE MATERIAS",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 32,
