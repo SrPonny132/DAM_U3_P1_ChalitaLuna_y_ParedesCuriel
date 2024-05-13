@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:dam_u3_practica2/main.dart';
-import 'package:dam_u3_practica2/pages/materias_page.dart';
-import 'package:dam_u3_practica2/pages/tareas_page.dart';
-import 'package:dam_u3_practica2/pages/consultas_page.dart';
+import 'package:dam_u3_practica1_asistenciaprofesores/main.dart';
+import 'package:dam_u3_practica1_asistenciaprofesores/pages/materias_page.dart';
+import 'package:dam_u3_practica1_asistenciaprofesores/pages/tareas_page.dart';
+import 'package:dam_u3_practica1_asistenciaprofesores/pages/consultas_page.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key});
@@ -14,8 +14,8 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           const UserAccountsDrawerHeader(
-            accountName: Text('Tec Tepic'),
-            accountEmail: Text('tecnologico@tecnm.edu.mx'),
+            accountName: Text('Sistema Institucional para Control de Tareas'),
+            accountEmail: Text('institutotecnologico@education.mx'),
             currentAccountPicture: CircleAvatar(
               backgroundImage: AssetImage('assets/logo/tec.png'),
             ),

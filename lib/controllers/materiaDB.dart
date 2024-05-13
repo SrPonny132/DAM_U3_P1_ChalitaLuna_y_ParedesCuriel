@@ -1,5 +1,5 @@
 import '../models/materia.dart';
-import 'conexion.dart';
+import 'conexionDB.dart';
 import 'package:sqflite/sqflite.dart';
 
 class MateriaDB {

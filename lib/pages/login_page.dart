@@ -10,10 +10,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>(); // Clave para el formulario
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _visible = true;
+  bool _visible = true; // Variable para mostrar u ocultar la contraseña
   Route homePageRoute = MaterialPageRoute(builder: (BuildContext context) {
     return HomePage();
   });
@@ -45,23 +45,11 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: AlignmentGeometry.lerp(
                     Alignment.centerLeft, Alignment.centerRight, 0.5),
                 child: Image.asset(
-                  'assets/logo/tec.png',
+                  'assets/logo/ittb&w.png',
                   fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(height: 20),
-              const Align(
-                alignment: Alignment.centerLeft,
-                widthFactor: 6,
-                child: Text(
-                  'Login',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-              ),
               const SizedBox(height: 10),
               Container(
                 width: 360,
@@ -69,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: AlignmentGeometry.lerp(
                     Alignment.centerLeft, Alignment.centerRight, 0.5),
                 child: const AutoSizeText(
-                  "REGISTRO DE MATERIAS",
+                  "Control de Tareas",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 32,

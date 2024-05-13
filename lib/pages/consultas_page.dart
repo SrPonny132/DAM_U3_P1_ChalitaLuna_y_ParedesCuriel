@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../models/tarea.dart';
 import '../controllers/tareaDB.dart';
-import 'package:dam_u3_practica2/widgets/drawer.dart';
+import 'package:dam_u3_practica1_asistenciaprofesores/widgets/drawer.dart';
 
 class ConsultasPage extends StatefulWidget {
   const ConsultasPage({Key? key});
@@ -61,7 +61,7 @@ class _ConsultasPageState extends State<ConsultasPage> {
                       child: Column(
                         children: [
                           const Text(
-                            'Selecciona un día para ver las tareas que vencen',
+                            'Selecciona una fecha para ver las tareas que vencen',
                             style: TextStyle(fontSize: 18),
                           ),
                           Expanded(

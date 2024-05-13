@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../models/tarea.dart';
 import '../controllers/tareaDB.dart';
-import 'package:dam_u3_practica2/widgets/drawer.dart';
+import 'package:dam_u3_practica1_asistenciaprofesores/widgets/drawer.dart';
 
 class TareaPage extends StatefulWidget {
   const TareaPage({Key? key});
@@ -48,11 +49,26 @@ class _TareaPageState extends State<TareaPage> {
                     labelText: "Descripción",
                   ),
                 ),
-                TextField(
-                  controller: _fechaEntregaController,
-                  decoration: const InputDecoration(
-                    labelText: "Fecha de Entrega",
-                  ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final selectedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime.now(),
+                    );
+
+                    if (selectedDate != null) {
+                      final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+                      setState(() {
+                        _fechaEntregaController.text = formattedDate;
+                      });
+                      setState(() {
+                        _fechaEntregaController.text = selectedDate.toString();
+                      });
+                    }
+                  },
+                  child: const Text("Seleccionar Fecha de Entrega"),
                 ),
               ],
             ),
@@ -114,11 +130,37 @@ class _TareaPageState extends State<TareaPage> {
                     labelText: "Descripción",
                   ),
                 ),
-                TextField(
-                  controller: _fechaEntregaController,
-                  decoration: const InputDecoration(
-                    labelText: "Fecha de Entrega",
-                  ),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        final DateTime currentDate = DateTime.now();
+                        final selectedDate = await showDatePicker(
+                          context: context,
+                          initialDate: currentDate,
+                          firstDate: DateTime(currentDate.year, currentDate.month, currentDate.day - 1),
+                          lastDate: DateTime(currentDate.year + 1),
+                        );
+
+                        if (selectedDate != null) {
+                          final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+                          setState(() {
+                            _fechaEntregaController.text = formattedDate;
+                          });
+                        }
+                      },
+                      child: const Text("Seleccionar Fecha de Entrega"),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: TextField(
+                        controller: _fechaEntregaController,
+                        decoration: const InputDecoration(
+                          labelText: "Fecha de Entrega",
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -152,8 +194,8 @@ class _TareaPageState extends State<TareaPage> {
     if (result == true) {
       try {
         Tarea newTarea = Tarea(
-          idTarea: 0, // Suponiendo que el idTarea se generará automáticamente en la base de datos
-          idMateria: '', // Asigna el id de la materia correspondiente aquí
+          idTarea: 0,
+          idMateria: '',
           descripcion: _descripcionController.text,
           fechaEntrega: _fechaEntregaController.text,
         );

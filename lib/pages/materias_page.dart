@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/materia.dart';
 import '../controllers/materiaDB.dart';
-import 'package:dam_u3_practica2/widgets/drawer.dart';
+import 'package:dam_u3_practica1_asistenciaprofesores/widgets/drawer.dart';
 
 class MateriasPage extends StatefulWidget {
   const MateriasPage({Key? key});
@@ -12,9 +12,11 @@ class MateriasPage extends StatefulWidget {
 
 class _MateriasPageState extends State<MateriasPage> {
   List<Materia> materias = [];
+  final TextEditingController _idController = TextEditingController();
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _semestreController = TextEditingController();
   final TextEditingController _docenteController = TextEditingController();
+  List<String> semestreOptions = ['AGO-DIC', 'ENE-JUN'];
 
   Future<void> loadMaterias() async {
     List<Materia> result = await MateriaDB.getMaterias();
@@ -30,6 +32,7 @@ class _MateriasPageState extends State<MateriasPage> {
   }
 
   Future<void> showEditMateriaDialog(Materia materia) async {
+    _idController.text = materia.idMateria;
     _nombreController.text = materia.nombre;
     _semestreController.text = materia.semestre;
     _docenteController.text = materia.docente;
@@ -44,6 +47,12 @@ class _MateriasPageState extends State<MateriasPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                TextField(
+                  controller: _idController,
+                  decoration: const InputDecoration(
+                    labelText: "ID de Materia",
+                  ),
+                ),
                 TextField(
                   controller: _nombreController,
                   decoration: const InputDecoration(
@@ -85,6 +94,7 @@ class _MateriasPageState extends State<MateriasPage> {
 
     if (result == true) {
       try {
+        materia.idMateria = _idController.text;
         materia.nombre = _nombreController.text;
         materia.semestre = _semestreController.text;
         materia.docente = _docenteController.text;
@@ -104,6 +114,7 @@ class _MateriasPageState extends State<MateriasPage> {
   }
 
   Future<void> showAddMateriaDialog() async {
+    _idController.clear();
     _nombreController.clear();
     _semestreController.clear();
     _docenteController.clear();
@@ -119,16 +130,55 @@ class _MateriasPageState extends State<MateriasPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
+                  controller: _idController,
+                  decoration: const InputDecoration(
+                    labelText: "ID de Materia",
+                  ),
+                ),
+                TextField(
                   controller: _nombreController,
                   decoration: const InputDecoration(
                     labelText: "Nombre de Materia",
                   ),
                 ),
-                TextField(
-                  controller: _semestreController,
-                  decoration: const InputDecoration(
-                    labelText: "Semestre",
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        value: semestreOptions[0],
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _semestreController.text = newValue! + _semestreController.text.substring(7);
+                          });
+                        },
+                        items: semestreOptions.map((String semestre) {
+                          return DropdownMenuItem<String>(
+                            value: semestre,
+                            child: Text(semestre),
+                          );
+                        }).toList(),
+                        decoration: const InputDecoration(
+                          labelText: 'Semestre',
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: TextField(
+                        controller: _semestreController,
+                        decoration: const InputDecoration(
+                          labelText: 'Año',
+                        ),
+                        keyboardType: TextInputType.number,
+                        maxLength: 4,
+                        onChanged: (String value) {
+                          setState(() {
+                            _semestreController.text = _semestreController.text.substring(0, 7) + value;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 TextField(
                   controller: _docenteController,
@@ -142,7 +192,8 @@ class _MateriasPageState extends State<MateriasPage> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                if (_nombreController.text.isEmpty ||
+                if (_idController.text.isEmpty||
+                    _nombreController.text.isEmpty ||
                     _semestreController.text.isEmpty ||
                     _docenteController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -169,7 +220,7 @@ class _MateriasPageState extends State<MateriasPage> {
     if (result == true) {
       try {
         Materia newMateria = Materia(
-          idMateria: '', // Corregido: Este campo debe ser vacío para agregar un nuevo registro, ya que se supone que se generará automáticamente en la base de datos.
+          idMateria: _idController.text,
           nombre: _nombreController.text,
           semestre: _semestreController.text,
           docente: _docenteController.text,
