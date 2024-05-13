@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: AlignmentGeometry.lerp(
                     Alignment.centerLeft, Alignment.centerRight, 0.5),
                 child: Image.asset(
-                  'assets/logo/ittb&w.png',
+                  'assets/logo/tec.png',
                   fit: BoxFit.cover,
                 ),
               ),
